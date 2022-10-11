@@ -22,7 +22,7 @@
   },
   "scripts": {
     "client-dev": "webpack-dev-server --mode development",
-    "server-dev": ""
+    "server-dev": "PORT=3000 nodemon ./src/server/app.ts"
   },
   "browserslist": {
     "production": [
@@ -55,6 +55,8 @@
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-react": "^7.31.10",
     "html-webpack-plugin": "^4.5.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
