@@ -30,12 +30,12 @@ export class Game {
     private activePiece: Piece;
 
     constructor() {
-        this.playfield = this.createPlayfield();
+        this.playfield = this.create2DArray(20, 10);
         this.activePiece = new Piece(PieceTypeEnum.T);
     }
 
-    createPlayfield() {
-        return Array.from(Array(20), () => new Array(10).fill(0));
+    create2DArray(rows: number, cols: number) {
+        return Array.from(Array(rows), () => new Array(cols).fill(0));
     }
 
     movePieceLeft = () => {
@@ -62,6 +62,17 @@ export class Game {
             this.lockPiece();
         }
     };
+
+    // TODO сделать wall jump
+    rotatePiece() {
+        const { blocks } = this.activePiece;
+
+        this.activePiece.blocks = blocks[0].map((_, index) => blocks.map((row) => row[index]).reverse());
+
+        if (this.hasCollision()) {
+            this.activePiece.blocks = blocks;
+        }
+    }
 
     hasCollision() {
         const { x: pieceX, y: pieceY, blocks } = this.activePiece;
