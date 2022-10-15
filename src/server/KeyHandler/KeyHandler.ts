@@ -6,7 +6,6 @@ type Keys = 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown';
 
 export const keyHandler = (socket: Socket, game: Game) => {
     socket.on('keydown', (key: Keys) => {
-        console.log('key', key);
         switch (key) {
             case 'ArrowLeft': {
                 game.movePieceLeft();

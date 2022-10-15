@@ -1,41 +1,28 @@
 import { Piece } from '../Piece/Piece';
-import { PieceType, PieceShape } from '../../models/piese';
-
-// const a = [
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-// ];
+import { PieceType, PieceShape as PlayfieldType } from '../../models/piese';
+import { COLS, ROWS } from '../../utils/constants';
 
 export class Game {
     // @ts-ignore
-    private playfield: PieceShape;
+    private playfield: PlayfieldType;
     private activePiece: Piece;
+    private nextPiece: Piece;
 
     constructor() {
-        this.playfield = this.create2DArray(20, 10);
-        this.activePiece = new Piece(PieceType.T);
+        this.playfield = this.create2DArray(ROWS, COLS);
+        this.activePiece = this.createPiece();
+        this.nextPiece = this.createPiece();
     }
 
     create2DArray(rows: number, cols: number) {
         return Array.from(Array(rows), () => new Array(cols).fill(0));
+    }
+
+    createPiece() {
+        const index = Math.floor(Math.random() * 7);
+        const type = Object.keys(PieceType)[index] as PieceType;
+
+        return new Piece(type);
     }
 
     movePieceLeft = () => {
@@ -60,6 +47,7 @@ export class Game {
         if (this.hasCollision()) {
             this.activePiece.y -= 1;
             this.lockPiece();
+            this.updatePiece();
         }
     };
 
@@ -118,6 +106,11 @@ export class Game {
         return {
             playfield,
         };
+    }
+
+    updatePiece() {
+        this.activePiece = this.nextPiece;
+        this.nextPiece = this.createPiece();
     }
 
     loop<T>(arr: any[][], callback: (y: number, x: number) => T, targetValue?: T) {
