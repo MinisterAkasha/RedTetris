@@ -1,49 +1,51 @@
-import { PieceTypeEnum } from '../../models/piese';
+import { PieceType, PieceShape } from '../../models/piese';
 
-const typeToBlocks: Record<PieceTypeEnum, number[][]> = {
-    [PieceTypeEnum.T]: [
-        [0, 1, 0],
-        [1, 1, 1],
+const { T, O, S, J, L, Z, I } = PieceType;
+
+const typeToBlocks: Record<PieceType, PieceShape> = {
+    [PieceType.T]: [
+        [0, T, 0],
+        [T, T, T],
         [0, 0, 0],
     ],
-    [PieceTypeEnum.O]: [
-        [1, 1],
-        [1, 1],
+    [PieceType.O]: [
+        [O, O],
+        [O, O],
     ],
-    [PieceTypeEnum.S]: [
-        [0, 1, 0],
-        [1, 1, 1],
+    [PieceType.S]: [
+        [0, S, 0],
+        [S, S, S],
         [0, 0, 0],
     ],
-    [PieceTypeEnum.J]: [
-        [0, 1, 0],
-        [1, 1, 1],
+    [PieceType.J]: [
+        [0, J, 0],
+        [J, J, J],
         [0, 0, 0],
     ],
-    [PieceTypeEnum.L]: [
-        [0, 1, 0],
-        [1, 1, 1],
+    [PieceType.L]: [
+        [0, L, 0],
+        [L, L, L],
         [0, 0, 0],
     ],
-    [PieceTypeEnum.Z]: [
-        [0, 1, 0],
-        [1, 1, 1],
+    [PieceType.Z]: [
+        [0, Z, 0],
+        [Z, Z, Z],
         [0, 0, 0],
     ],
-    [PieceTypeEnum.I]: [
-        [0, 1, 0],
-        [1, 1, 1],
+    [PieceType.I]: [
+        [0, I, 0],
+        [I, I, I],
         [0, 0, 0],
     ],
 };
 
 export class Piece {
-    readonly type: PieceTypeEnum;
-    blocks: number[][];
+    readonly type: PieceType;
+    blocks: PieceShape;
     x: number;
     y: number;
 
-    constructor(type: PieceTypeEnum) {
+    constructor(type: PieceType) {
         this.type = type;
         this.x = 0;
         this.y = 0;

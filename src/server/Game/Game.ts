@@ -1,5 +1,5 @@
 import { Piece } from '../Piece/Piece';
-import { PieceTypeEnum } from '../../models/piese';
+import { PieceType, PieceShape } from '../../models/piese';
 
 // const a = [
 //     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,12 +26,12 @@ import { PieceTypeEnum } from '../../models/piese';
 
 export class Game {
     // @ts-ignore
-    private playfield: number[][];
+    private playfield: PieceShape;
     private activePiece: Piece;
 
     constructor() {
         this.playfield = this.create2DArray(20, 10);
-        this.activePiece = new Piece(PieceTypeEnum.T);
+        this.activePiece = new Piece(PieceType.T);
     }
 
     create2DArray(rows: number, cols: number) {
@@ -101,7 +101,26 @@ export class Game {
         });
     }
 
-    loop<T>(arr: number[][], callback: (y: number, x: number) => T, targetValue?: T) {
+    getState() {
+        const playfield = this.create2DArray(20, 10);
+        const { x: pieceX, y: pieceY, blocks } = this.activePiece;
+
+        this.loop(this.playfield, (y, x) => {
+            playfield[y][x] = this.playfield[y][x];
+        });
+
+        this.loop(blocks, (y, x) => {
+            if (blocks[y][x]) {
+                playfield[pieceY + y][pieceX + x] = blocks[y][x];
+            }
+        });
+
+        return {
+            playfield,
+        };
+    }
+
+    loop<T>(arr: any[][], callback: (y: number, x: number) => T, targetValue?: T) {
         let result: any;
 
         for (let y = 0; y < arr.length; y++) {

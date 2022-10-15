@@ -2,13 +2,12 @@ import express from 'express';
 import { Server } from 'socket.io';
 
 import { Game } from './Game/Game';
+import { keyHandler } from './KeyHandler/KeyHandler';
 
 const PORT = process.env.PORT ?? 3000;
 const app = express();
 
 app.use(express.static('build'));
-
-let users: any[] = [];
 
 const server = app.listen(PORT, () => {
     console.log(`Server has been started on port ${PORT}...`);
@@ -20,48 +19,51 @@ const io = new Server(server, {
     },
 });
 
-const game = new Game();
-
 io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
 
+    const game = new Game();
+
+    keyHandler(socket, game);
+
+    // setInterval(() => {
+    //     game.movePieceDown();
+    //     socket.emit('game-state', game.getState());
+    //     // io.to('game-room').emit('game-state', game.getState());
+    // }, 1000);
+
     // socket.emit('game', game);
 
-    socket.on('game', () => {
-        socket.emit('game', game);
-    });
+    // socket.on('game', () => {
+    //     socket.emit('game', game);
+    // });
 
-    if (!users.includes(socket.id)) {
-        users.push(socket.id);
-    }
-    socket.join('clock-room');
+    socket.join('game-room');
 
-    io.to('clock-room').emit('users', users);
+    // io.to('game-room').emit('users', users);
 
     // socket.on('join', () => {
     //     if (!users.includes(socket.id)) {
     //         users.push(socket.id);
     //     }
-    //     socket.join('clock-room');
+    //     socket.join('game-room');
     //
-    //     io.to('clock-room').emit('users', users);
+    //     io.to('game-room').emit('users', users);
     // });
     //
     // socket.on('leave', () => {
     //     users = users.filter((el) => el !== socket.id);
     //
-    //     io.to('clock-room').emit('users', users);
+    //     io.to('game-room').emit('users', users);
     //
-    //     socket.leave('clock-room');
+    //     socket.leave('game-room');
     //     // socket.emit('time', null);
     // });
 
     socket.on('disconnect', (reason) => {
-        users = users.filter((el) => el !== socket.id);
+        // io.to('game-room').emit('users', users);
 
-        io.to('clock-room').emit('users', users);
-
-        socket.leave('clock-room');
+        // socket.leave('game-room');
         console.log(reason);
     });
 });

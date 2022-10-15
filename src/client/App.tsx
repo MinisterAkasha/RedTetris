@@ -6,6 +6,7 @@ import { Game } from '../server/Game/Game';
 import Playfield from './Components/Playfield/Playfield';
 import { GlobalStyle } from './Components/GlobalStyled/GlobalStyled';
 
+// @ts-ignore
 const state = [
     ['O', 'O', 0, 0, 0, 0, 0, 0, 0, 'I'],
     ['O', 'O', 0, 0, 0, 0, 0, 0, 0, 'I'],
@@ -31,6 +32,7 @@ const state = [
 
 export function App() {
     const [socket, setSocket] = useState<Socket | null>(null);
+    const [gameState, setGameState] = useState<any>(null);
 
     useEffect(() => {
         const ioSocket = io('http://localhost:3000');
@@ -39,12 +41,22 @@ export function App() {
     }, []);
 
     useEffect(() => {
-        // socket?.on('game', (data) => {
-        //     console.log(data);
-        //
-        //
-        //     window.game = data;
-        // });
+        const keyHandler = (event: KeyboardEvent) => {
+            socket?.emit('keydown', event.code);
+        };
+
+        document.addEventListener('keydown', keyHandler);
+
+        return () => {
+            document.removeEventListener('keydown', keyHandler);
+        };
+    }, [socket]);
+
+    useEffect(() => {
+        socket?.on('game-state', setGameState);
+    }, [socket]);
+
+    useEffect(() => {
         // @ts-ignore
         window.game = new Game();
     }, []);
@@ -59,7 +71,7 @@ export function App() {
             <button type="button" onClick={onClick}>
                 Update
             </button>
-            <Playfield state={{ items: state as any }} height={750} />
+            {gameState && <Playfield state={gameState} height={750} />}
         </>
     );
 }

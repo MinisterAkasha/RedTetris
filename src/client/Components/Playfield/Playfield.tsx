@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Block } from '../Block/Block';
-import { PieceTypeEnum } from '../../../models/piese';
+import { PieceType } from '../../../models/piese';
 
-const TypeToColor: Record<PieceTypeEnum, string> = {
+const TypeToColor: Record<PieceType, string> = {
     I: 'red',
     J: 'white',
     L: 'purple',
@@ -33,7 +33,7 @@ const StyledPlayfield = styled.div<PlayfieldSizeProps>`
 interface PlayfieldProps {
     height: number;
     state: {
-        items: (number | PieceTypeEnum)[][];
+        playfield: (number | PieceType)[][];
     };
 }
 
@@ -47,7 +47,7 @@ function Playfield({ state, height }: PlayfieldProps) {
 
     return (
         <StyledPlayfield width={width} blockSize={blockSize}>
-            {state.items.map((row, y) => {
+            {state.playfield.map((row, y) => {
                 return row.map((col, x) => {
                     if (typeof col === 'number') {
                         return null;

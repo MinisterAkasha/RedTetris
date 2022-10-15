@@ -1,4 +1,6 @@
-export enum PieceTypeEnum {
+export type PieceShape = (PieceType | number)[][];
+
+export enum PieceType {
     I = 'I',
     J = 'J',
     L = 'L',
