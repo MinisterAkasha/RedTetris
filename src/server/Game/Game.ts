@@ -48,6 +48,7 @@ export class Game {
             this.activePiece.y -= 1;
             this.lockPiece();
             this.updatePiece();
+            this.clearLines();
         }
     };
 
@@ -87,6 +88,31 @@ export class Game {
                 this.playfield[pieceY + y][pieceX + x] = blocks[y][x];
             }
         });
+    }
+
+    clearLines() {
+        const lines = [];
+
+        for (let y = ROWS - 1; y >= 0; y--) {
+            let blocksCount = 0;
+
+            for (let x = 0; x < COLS; x++) {
+                if (this.playfield[y][x]) {
+                    blocksCount++;
+                }
+            }
+
+            if (!blocksCount) {
+                break;
+            } else if (blocksCount === COLS) {
+                lines.unshift(y);
+            }
+        }
+
+        for (const index of lines) {
+            this.playfield.splice(index, 1);
+            this.playfield.unshift(new Array(COLS).fill(0));
+        }
     }
 
     getState() {

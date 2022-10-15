@@ -61,6 +61,7 @@ export function App() {
         window.game = new Game();
     }, []);
 
+    // @ts-ignore
     const onClick = useCallback(() => {
         socket?.emit('game');
     }, [socket]);
@@ -68,9 +69,6 @@ export function App() {
     return (
         <>
             <GlobalStyle />
-            <button type="button" onClick={onClick}>
-                Update
-            </button>
             {gameState && <Playfield state={gameState} height={750} />}
         </>
     );
