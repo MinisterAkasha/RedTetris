@@ -90,6 +90,15 @@ export class Game {
         }
     };
 
+    hardDrop(callback?: VoidFunction) {
+        const { activePiece } = this;
+
+        while (activePiece === this.activePiece) {
+            this.movePieceDown();
+            callback?.();
+        }
+    }
+
     // TODO сделать wall jump
     rotatePiece() {
         const { blocks } = this.activePiece;

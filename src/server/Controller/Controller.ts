@@ -48,10 +48,17 @@ export class Controller {
                     }
                     break;
                 }
+                case 'Space': {
+                    if (isPlaying) {
+                        this.stopTimer();
+                        this.game.hardDrop(() => this.socket.emit('game-state', this.game.getState()));
+                    }
+                    break;
+                }
                 case 'ArrowDown': {
                     if (isPlaying) {
                         this.game.movePieceDown();
-                        this.startTimer();
+                        this.stopTimer();
                     }
                     break;
                 }
@@ -90,6 +97,7 @@ export class Controller {
             const isPlaying = gameStatus === 'playing';
 
             switch (key) {
+                case 'Space':
                 case 'ArrowDown': {
                     if (isPlaying) {
                         this.startTimer();
