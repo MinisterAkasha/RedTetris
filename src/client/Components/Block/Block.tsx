@@ -1,8 +1,20 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
+import { PieceType } from '../../../models/piese';
+
+const TypeToColor: Record<PieceType, string> = {
+    I: 'red',
+    J: 'white',
+    L: 'purple',
+    O: 'blue',
+    S: 'green',
+    T: 'yellow',
+    Z: 'cyan',
+};
+
 interface BlockProps {
-    color: string;
+    type: PieceType;
     size: number;
     position: {
         x: number;
@@ -10,7 +22,7 @@ interface BlockProps {
     };
 }
 
-const StyledBlock = styled.span<BlockProps>`
+const StyledBlock = styled.span<Omit<BlockProps, 'type'> & { color: string }>`
     box-sizing: border-box;
     border-style: outset;
     grid-column: 1;
@@ -29,6 +41,6 @@ const StyledBlock = styled.span<BlockProps>`
     `}
 `;
 
-export function Block({ color, size, position }: BlockProps) {
-    return <StyledBlock color={color} size={size} position={position} />;
+export function Block({ type, size, position }: BlockProps) {
+    return <StyledBlock color={TypeToColor[type]} size={size} position={position} />;
 }

@@ -157,6 +157,9 @@ export class Game {
 
         return {
             playfield,
+            level: this.level,
+            score: this.score,
+            nextPiece: this.nextPiece,
         };
     }
 

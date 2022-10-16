@@ -5,6 +5,7 @@ import { Game } from '../server/Game/Game';
 
 import Playfield from './Components/Playfield/Playfield';
 import { GlobalStyle } from './Components/GlobalStyled/GlobalStyled';
+import GameSideBar from './Components/GameSideBar/GameSideBar';
 
 // @ts-ignore
 const state = [
@@ -69,7 +70,12 @@ export function App() {
     return (
         <>
             <GlobalStyle />
-            {gameState && <Playfield state={gameState} height={750} />}
+            {gameState && (
+                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    <Playfield state={gameState} height={750} />
+                    <GameSideBar score={gameState.score} level={gameState.level} nextPiece={gameState.nextPiece} />
+                </div>
+            )}
         </>
     );
 }

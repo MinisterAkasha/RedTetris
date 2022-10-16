@@ -6,4 +6,8 @@ export const GlobalStyle = createGlobalStyle`
   *::before {
     box-sizing: border-box;
   }
+  
+  body {
+    background: #000;
+  }
 `;
