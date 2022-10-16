@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 
 import { Game } from '../Game/Game';
 
-type Keys = 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown';
+type Keys = 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown' | 'Enter' | 'Escape' | 'Space';
 
 export const keyHandler = (socket: Socket, game: Game) => {
     socket.on('keydown', (key: Keys) => {

@@ -1,16 +1,18 @@
 import { Piece } from '../Piece/Piece';
 import { PieceType, PieceShape as PlayfieldType } from '../../models/piese';
 import { COLS, ROWS } from '../../utils/constants';
+import { GameStatusType } from '../../models/game';
 
 export class Game {
     static points = [40, 100, 300, 1200];
-    readonly playfield: PlayfieldType;
+    private playfield: PlayfieldType;
     private activePiece: Piece;
     private nextPiece: Piece;
     score: number;
     lines: number;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private _level: number;
+    gameStatus: GameStatusType;
 
     constructor() {
         this.playfield = this.create2DArray(ROWS, COLS);
@@ -19,6 +21,7 @@ export class Game {
         this.lines = 0;
         this.score = 0;
         this._level = 0;
+        this.gameStatus = 'start';
     }
 
     // TODO добавить систему уровней по времени
@@ -28,6 +31,16 @@ export class Game {
 
     set level(value: number) {
         this._level = value;
+    }
+
+    reset() {
+        this.playfield = this.create2DArray(ROWS, COLS);
+        this.activePiece = this.createPiece();
+        this.nextPiece = this.createPiece();
+        this.lines = 0;
+        this.score = 0;
+        this._level = 0;
+        this.gameStatus = 'start';
     }
 
     create2DArray(rows: number, cols: number) {
@@ -58,6 +71,10 @@ export class Game {
     };
 
     movePieceDown = () => {
+        if (this.gameStatus === 'over') {
+            return;
+        }
+
         this.activePiece.y += 1;
 
         if (this.hasCollision()) {
@@ -66,6 +83,10 @@ export class Game {
             this.updatePiece();
             const lines = this.clearLines();
             this.updateScore(lines);
+        }
+
+        if (this.hasCollision()) {
+            this.updateGameStatus('over');
         }
     };
 
@@ -141,6 +162,10 @@ export class Game {
         }
     }
 
+    updateGameStatus(newGameStatus: GameStatusType) {
+        this.gameStatus = newGameStatus;
+    }
+
     getState() {
         const playfield = this.create2DArray(20, 10);
         const { x: pieceX, y: pieceY, blocks } = this.activePiece;
@@ -160,6 +185,7 @@ export class Game {
             level: this.level,
             score: this.score,
             nextPiece: this.nextPiece,
+            gameStatus: this.gameStatus,
         };
     }
 

@@ -2,7 +2,7 @@ import express from 'express';
 import { Server } from 'socket.io';
 
 import { Game } from './Game/Game';
-import { keyHandler } from './KeyHandler/KeyHandler';
+import { Controller } from './Controller/Controller';
 
 const PORT = process.env.PORT ?? 3000;
 const app = express();
@@ -23,8 +23,8 @@ io.on('connection', (socket) => {
     console.log('a user connected', socket.id);
 
     const game = new Game();
-
-    keyHandler(socket, game);
+    // @ts-ignore
+    const controller = new Controller(socket, game);
 
     // setInterval(() => {
     //     game.movePieceDown();

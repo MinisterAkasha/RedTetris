@@ -53,6 +53,6 @@ export class Piece {
         this.type = type;
         this.blocks = typeToBlocks[this.type];
         this.x = Math.floor((COLS - this.blocks.length) / 2);
-        this.y = 0;
+        this.y = -1;
     }
 }

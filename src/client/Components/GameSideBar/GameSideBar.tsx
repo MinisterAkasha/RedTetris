@@ -7,18 +7,29 @@ import { BlocksGrid } from '../Playfield/Playfield';
 
 type GameSideBarProps = Omit<GameState, 'playfield'>;
 
-const StyledSideBar = styled.div`
+const StyledSideBar = styled.div<{ opacity: number }>`
+    position: relative;
     color: white;
     background: black;
     border: 5px solid white;
     border-left: none;
     box-sizing: content-box;
     padding: 20px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        ${({ opacity }) => `background: rgba(0, 0, 0, ${opacity});`};
+    }
 `;
 
-export function GameSideBar({ level, score, nextPiece }: GameSideBarProps) {
+export function GameSideBar({ level, score, nextPiece, gameStatus }: GameSideBarProps) {
     return (
-        <StyledSideBar>
+        <StyledSideBar opacity={gameStatus === 'playing' ? 0 : 0.8}>
             <div>Level: {level}</div>
             <div>Score: {score}</div>
             <div>Next:</div>

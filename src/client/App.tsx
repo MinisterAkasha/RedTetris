@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import { Game } from '../server/Game/Game';
-
-import Playfield from './Components/Playfield/Playfield';
 import { GlobalStyle } from './Components/GlobalStyled/GlobalStyled';
-import GameSideBar from './Components/GameSideBar/GameSideBar';
+import Game from './Components/Game/Game';
 
 // @ts-ignore
 const state = [
@@ -33,33 +30,11 @@ const state = [
 
 export function App() {
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [gameState, setGameState] = useState<any>(null);
 
     useEffect(() => {
         const ioSocket = io('http://localhost:3000');
 
         setSocket(ioSocket);
-    }, []);
-
-    useEffect(() => {
-        const keyHandler = (event: KeyboardEvent) => {
-            socket?.emit('keydown', event.code);
-        };
-
-        document.addEventListener('keydown', keyHandler);
-
-        return () => {
-            document.removeEventListener('keydown', keyHandler);
-        };
-    }, [socket]);
-
-    useEffect(() => {
-        socket?.on('game-state', setGameState);
-    }, [socket]);
-
-    useEffect(() => {
-        // @ts-ignore
-        window.game = new Game();
     }, []);
 
     // @ts-ignore
@@ -70,12 +45,7 @@ export function App() {
     return (
         <>
             <GlobalStyle />
-            {gameState && (
-                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                    <Playfield state={gameState} height={750} />
-                    <GameSideBar score={gameState.score} level={gameState.level} nextPiece={gameState.nextPiece} />
-                </div>
-            )}
+            {socket && <Game height={750} socket={socket} />}
         </>
     );
 }
