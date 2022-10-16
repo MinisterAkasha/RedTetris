@@ -44,6 +44,7 @@
     ],
     "implicit-arrow-linebreak": "off",
     "no-plusplus": "off",
+    "no-underscore-dangle": "off",
     "max-classes-per-file": "off",
     "operator-linebreak": "off",
     "object-curly-newline": "off",

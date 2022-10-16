@@ -3,15 +3,31 @@ import { PieceType, PieceShape as PlayfieldType } from '../../models/piese';
 import { COLS, ROWS } from '../../utils/constants';
 
 export class Game {
-    // @ts-ignore
-    private playfield: PlayfieldType;
+    static points = [40, 100, 300, 1200];
+    readonly playfield: PlayfieldType;
     private activePiece: Piece;
     private nextPiece: Piece;
+    score: number;
+    lines: number;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    private _level: number;
 
     constructor() {
         this.playfield = this.create2DArray(ROWS, COLS);
         this.activePiece = this.createPiece();
         this.nextPiece = this.createPiece();
+        this.lines = 0;
+        this.score = 0;
+        this._level = 0;
+    }
+
+    // TODO добавить систему уровней по времени
+    get level(): number {
+        return Math.floor(this.lines * 0.1);
+    }
+
+    set level(value: number) {
+        this._level = value;
     }
 
     create2DArray(rows: number, cols: number) {
@@ -48,7 +64,8 @@ export class Game {
             this.activePiece.y -= 1;
             this.lockPiece();
             this.updatePiece();
-            this.clearLines();
+            const lines = this.clearLines();
+            this.updateScore(lines);
         }
     };
 
@@ -112,6 +129,15 @@ export class Game {
         for (const index of lines) {
             this.playfield.splice(index, 1);
             this.playfield.unshift(new Array(COLS).fill(0));
+        }
+
+        return lines.length;
+    }
+
+    updateScore(lines: number) {
+        if (lines > 0) {
+            this.score += Game.points[lines] * (this._level + 1);
+            this.lines += lines;
         }
     }
 
