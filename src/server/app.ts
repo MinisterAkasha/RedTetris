@@ -1,6 +1,9 @@
 import express from 'express';
 import { Server } from 'socket.io';
 
+import { RoomType } from '../models/room';
+import { SocketEvents } from '../models/events';
+
 import { Game } from './Game/Game';
 import { Controller } from './Controller/Controller';
 
@@ -25,6 +28,10 @@ io.on('connection', (socket) => {
     const game = new Game();
     // @ts-ignore
     const controller = new Controller(socket, game);
+
+    socket.on(SocketEvents.CREATE_ROOM, (data: RoomType) => {
+        console.log(data);
+    });
 
     // setInterval(() => {
     //     game.movePieceDown();

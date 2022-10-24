@@ -1,7 +1,9 @@
-// TODO типизировать
+export type ModeType = 'solo' | 'multiplayer';
+
 export interface RoomType {
-    mode: string;
+    mode: ModeType;
     host: string;
     limit: number;
-    users: number;
+    usersCount: number;
+    users: string[];
 }

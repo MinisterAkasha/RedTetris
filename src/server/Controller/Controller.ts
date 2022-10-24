@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 
 import { Game } from '../Game/Game';
+import { SocketEvents } from '../../models/events';
 
 type Keys = 'ArrowLeft' | 'ArrowUp' | 'ArrowRight' | 'ArrowDown' | 'Enter' | 'Escape' | 'Space';
 
@@ -20,11 +21,11 @@ export class Controller {
 
     update() {
         this.game.movePieceDown();
-        this.socket.emit('game-state', this.game.getState());
+        this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
     }
 
     handleKeydown() {
-        this.socket.on('keydown', (key: Keys) => {
+        this.socket.on(SocketEvents.KEYDOWN, (key: Keys) => {
             const { gameStatus } = this.game.getState();
             const isPlaying = gameStatus === 'playing';
             const isGameOver = gameStatus === 'over';
@@ -51,7 +52,7 @@ export class Controller {
                 case 'Space': {
                     if (isPlaying) {
                         this.stopTimer();
-                        this.game.hardDrop(() => this.socket.emit('game-state', this.game.getState()));
+                        this.game.hardDrop(() => this.socket.emit(SocketEvents.GAME_STATE, this.game.getState()));
                     }
                     break;
                 }
@@ -84,15 +85,15 @@ export class Controller {
             }
 
             if (isPlaying && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key)) {
-                this.socket.emit('game-state', this.game.getState());
+                this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
             } else if (['Escape', 'Enter'].includes(key)) {
-                this.socket.emit('game-state', this.game.getState());
+                this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
             }
         });
     }
 
     handleKeyup() {
-        this.socket.on('keyup', (key: Keys) => {
+        this.socket.on(SocketEvents.KEYUP, (key: Keys) => {
             const { gameStatus } = this.game.getState();
             const isPlaying = gameStatus === 'playing';
 

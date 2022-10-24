@@ -6,6 +6,7 @@ import GameSideBar from '../GameSideBar/GameSideBar';
 import { GameState } from '../../../models/game';
 import { GameScreen } from '../GameSceen/GameScreen';
 import { useStores } from '../../store/store';
+import { SocketEvents } from '../../../models/events';
 
 interface GameProps {
     height: number;
@@ -23,10 +24,10 @@ function Game({ height }: GameProps) {
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {
-            socketStore.socket.emit('keydown', event.code);
+            socketStore.socket.emit(SocketEvents.KEYDOWN, event.code);
         };
         const keyUpHandler = (event: KeyboardEvent) => {
-            socketStore.socket.emit('keyup', event.code);
+            socketStore.socket.emit(SocketEvents.KEYUP, event.code);
         };
 
         document.addEventListener('keydown', keyDownHandler);
@@ -39,7 +40,7 @@ function Game({ height }: GameProps) {
     }, [socketStore.socket]);
 
     useEffect(() => {
-        socketStore.socket.on('game-state', setGameState);
+        socketStore.socket.on(SocketEvents.GAME_STATE, setGameState);
     }, [socketStore.socket]);
 
     return (
