@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Socket } from 'socket.io-client';
 import styled from 'styled-components';
 
 import Playfield from '../Playfield/Playfield';
 import GameSideBar from '../GameSideBar/GameSideBar';
 import { GameState } from '../../../models/game';
 import { GameScreen } from '../GameSceen/GameScreen';
+import { useStores } from '../../store/store';
 
 interface GameProps {
     height: number;
-    socket: Socket;
 }
 
 const Container = styled.div`
     position: relative;
 `;
 
-function Game({ height, socket }: GameProps) {
+function Game({ height }: GameProps) {
+    const { socketStore } = useStores();
     const [gameState, setGameState] = useState<GameState | null>(null);
 
     useEffect(() => {});
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {
-            socket.emit('keydown', event.code);
+            socketStore.socket.emit('keydown', event.code);
         };
         const keyUpHandler = (event: KeyboardEvent) => {
-            socket.emit('keyup', event.code);
+            socketStore.socket.emit('keyup', event.code);
         };
 
         document.addEventListener('keydown', keyDownHandler);
@@ -36,11 +36,11 @@ function Game({ height, socket }: GameProps) {
             document.removeEventListener('keydown', keyDownHandler);
             document.removeEventListener('keyup', keyUpHandler);
         };
-    }, [socket]);
+    }, [socketStore.socket]);
 
     useEffect(() => {
-        socket.on('game-state', setGameState);
-    }, [socket]);
+        socketStore.socket.on('game-state', setGameState);
+    }, [socketStore.socket]);
 
     return (
         <Container>

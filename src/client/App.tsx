@@ -1,51 +1,38 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { Route, Routes } from 'react-router-dom';
 
 import { GlobalStyle } from './Components/GlobalStyled/GlobalStyled';
 import Game from './Components/Game/Game';
-
-// @ts-ignore
-const state = [
-    ['O', 'O', 0, 0, 0, 0, 0, 0, 0, 'I'],
-    ['O', 'O', 0, 0, 0, 0, 0, 0, 0, 'I'],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 'I'],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 'I'],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 'Z', 'Z', 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 'Z', 'Z', 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 'S', 'S', 0, 0],
-    [0, 0, 0, 0, 0, 'S', 'S', 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 'L', 0, 0, 0, 0, 0],
-    [0, 0, 'L', 'L', 'L', 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 'T', 0, 0, 0, 0, 0, 'J', 0, 0],
-    ['T', 'T', 'T', 0, 0, 0, 0, 'J', 'J', 'J'],
-];
+import { HomePage } from './Components/HomePage/HomePage';
+import { useStores } from './store/store';
 
 export function App() {
-    const [socket, setSocket] = useState<Socket | null>(null);
+    const {
+        socketStore: { setSocket, socket },
+    } = useStores();
 
     useEffect(() => {
+        if (socket) {
+            return;
+        }
+
         const ioSocket = io('http://localhost:3000');
 
         setSocket(ioSocket);
-    }, []);
-
-    // @ts-ignore
-    const onClick = useCallback(() => {
-        socket?.emit('game');
-    }, [socket]);
+    }, [setSocket, socket]);
 
     return (
         <>
             <GlobalStyle />
-            {socket && <Game height={750} socket={socket} />}
+            {!socket ? (
+                'Loading...'
+            ) : (
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/:roomName" element={<Game height={750} />} />
+                </Routes>
+            )}
         </>
     );
 }
