@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 import Playfield from '../Playfield/Playfield';
 import GameSideBar from '../GameSideBar/GameSideBar';
@@ -18,9 +19,25 @@ const Container = styled.div`
 
 function Game({ height }: GameProps) {
     const { socketStore } = useStores();
+    const { pathname } = useLocation();
+
+    const hostName = useMemo(() => {
+        return (pathname.match(/(?<=\[).+?(?=\])/g) || [])[0];
+    }, [pathname]);
+
+    console.log('hostName', hostName);
     const [gameState, setGameState] = useState<GameState | null>(null);
 
-    useEffect(() => {});
+    useEffect(() => {
+        if (!hostName) {
+            return;
+        }
+        socketStore.socket.emit(SocketEvents.JOIN_ROOM, hostName);
+
+        return () => {
+            socketStore.socket.emit(SocketEvents.LEAVE_ROOM, hostName);
+        };
+    }, [hostName, socketStore.socket]);
 
     useEffect(() => {
         const keyDownHandler = (event: KeyboardEvent) => {

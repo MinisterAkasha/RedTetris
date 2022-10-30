@@ -1,7 +1,7 @@
 export type ModeType = 'solo' | 'multiplayer';
 
 export interface RoomType {
-    mode: ModeType;
+    readonly mode: ModeType;
     host: string;
     limit: number;
     usersCount: number;

@@ -6,6 +6,8 @@ import { GlobalStyle } from './Components/GlobalStyled/GlobalStyled';
 import Game from './Components/Game/Game';
 import { HomePage } from './Components/HomePage/HomePage';
 import { useStores } from './store/store';
+import { AuthPage } from './Components/AuthPage/AuthPage';
+import { RequireAuth } from './Components/RequireAuth/RequireAuth';
 
 export function App() {
     const {
@@ -29,8 +31,16 @@ export function App() {
                 'Loading...'
             ) : (
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route
+                        path="/"
+                        element={(
+                            <RequireAuth>
+                                <HomePage />
+                            </RequireAuth>
+                          )}
+                    />
                     <Route path="/:roomName" element={<Game height={750} />} />
+                    <Route path="/auth" element={<AuthPage />} />
                 </Routes>
             )}
         </>

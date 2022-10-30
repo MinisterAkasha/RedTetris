@@ -35,9 +35,9 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
                 Users
             </Sell>
             <Sell position={5} size={1} />
-            {rooms.map(({ mode, limit, host, users }) => {
+            {rooms.map(({ mode, limit, host, usersCount }) => {
                 return (
-                    <>
+                    <React.Fragment key={host}>
                         <Sell position={1} size={2}>
                             {host}
                         </Sell>
@@ -45,12 +45,12 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
                             {mode}
                         </Sell>
                         <Sell position={4} size={1}>
-                            {users}/{limit}
+                            {usersCount}/{limit}
                         </Sell>
                         <Sell position={5} size={1}>
                             <Link to={`/${mode}[${host}]`}>Join</Link>
                         </Sell>
-                    </>
+                    </React.Fragment>
                 );
             })}
         </Table>

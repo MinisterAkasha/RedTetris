@@ -16,7 +16,7 @@ export function GameSettings() {
 
     const createRoom = useCallback(
         (roomSetting: Omit<RoomType, 'users' | 'usersCount'>) => () => {
-            socket.emit(SocketEvents.CREATE_ROOM, { ...roomSetting, usersCount: 1 });
+            socket.emit(SocketEvents.CREATE_ROOM, { ...roomSetting });
         },
         [socket],
     );
