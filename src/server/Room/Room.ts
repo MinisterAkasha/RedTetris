@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 
 import { ModeType, RoomType } from '../../models/room';
 import { User } from '../User/User';
+import { Game } from '../Game/Game';
 
 export class Room {
     readonly host: string;
@@ -20,17 +21,29 @@ export class Room {
         this.socket = socket;
     }
 
-    addUser(user: User) {
+    connect(user: User) {
         if (this.users.length < this.limit) {
             this.users.push(user);
         }
+
+        if (user.name === this.host && !user.game) {
+            user.game = new Game();
+        }
     }
 
-    removeUser(user: User) {
+    disconnect(user: User) {
+        // TODO проверка на хоста -> что дальше?
         this.users = this.users.filter((u) => u.id !== user.id);
+        user.game = null;
     }
 
-    startGame() {}
+    startGame() {
+        this.users.forEach((user) => {
+            if (!user.game) {
+                user.game = new Game();
+            }
+        });
+    }
 
     getState() {
         return {
@@ -40,8 +53,4 @@ export class Room {
             usersCount: this.users.length,
         };
     }
-
-    // disconnect(name: string) {
-    //
-    // }
 }

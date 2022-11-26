@@ -22,14 +22,8 @@ export const HomePage = observer(() => {
         socket.on(SocketEvents.GET_ROOMS, (data: RoomType[]) => {
             roomStore.setRooms(data);
         });
+        socket.emit(SocketEvents.GET_ROOMS);
     }, [roomStore, socket]);
-
-    // const setGameSetting = useCallback(
-    //     (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-    //         setSetting((prev) => ({ ...prev, [selector]: event.target.value }));
-    //     },
-    //     [setSetting],
-    // );
 
     return (
         <div>

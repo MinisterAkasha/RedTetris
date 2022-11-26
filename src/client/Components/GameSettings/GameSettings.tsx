@@ -9,6 +9,7 @@ const modeTypes: ModeType[] = ['solo', 'multiplayer'];
 export function GameSettings() {
     const {
         socketStore: { socket },
+        userStore: { user },
     } = useStores();
 
     const [limit, setLimit] = useState(1);
@@ -52,7 +53,7 @@ export function GameSettings() {
                 </>
             )}
 
-            <button type="button" onClick={createRoom({ host: 'akasha', mode, limit })}>
+            <button type="button" onClick={createRoom({ host: user as string, mode, limit })}>
                 Create room
             </button>
         </div>

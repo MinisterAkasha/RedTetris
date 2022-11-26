@@ -39,12 +39,20 @@ const onConnect = (rooms: Room[]) => {
 io.on('connection', (socket) => {
     // TODO дописать добавление имени пользователю
     // @ts-ignore
-    const user = new User(socket, 'akasha', socket.id);
+    const user = new User(socket, socket.id);
 
     users.push(user);
     // console.log('a user connected', socket.id, users);
 
     onConnect(rooms);
+
+    socket.on(SocketEvents.SET_USER_NAME, (name: string) => {
+        user.name = name;
+    });
+
+    socket.on(SocketEvents.GET_ROOMS, () => {
+        sendRoomsData(rooms);
+    });
 
     socket.on(SocketEvents.CREATE_ROOM, (data: RoomType) => {
         // console.log(SocketEvents.CREATE_ROOM, data);
@@ -58,13 +66,12 @@ io.on('connection', (socket) => {
     socket.on(SocketEvents.JOIN_ROOM, (hostName: string) => {
         console.log(SocketEvents.JOIN_ROOM, hostName);
 
-        // const newUser = users.filter((user) => user.name === )
         const currentRoom = rooms.filter((room) => room.host === hostName)[0];
 
-        console.log('currentRoom', currentRoom);
-
         if (currentRoom) {
-            currentRoom.addUser(user);
+            currentRoom.connect(user);
+            // @ts-ignore
+            console.log('currentRoom', currentRoom.users);
             socket.join(currentRoom.host);
         } else {
             // TODO дописать, если комната не найдена
@@ -79,7 +86,7 @@ io.on('connection', (socket) => {
         // console.log('currentRoom', currentRoom);
 
         if (currentRoom) {
-            currentRoom.removeUser(user);
+            currentRoom.disconnect(user);
             socket.leave(currentRoom.host);
         } else {
             // TODO дописать, если комната не найдена

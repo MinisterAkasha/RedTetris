@@ -35,6 +35,7 @@ function Game({ height }: GameProps) {
         socketStore.socket.emit(SocketEvents.JOIN_ROOM, hostName);
 
         return () => {
+            console.log('LEAVE ROOM');
             socketStore.socket.emit(SocketEvents.LEAVE_ROOM, hostName);
         };
     }, [hostName, socketStore.socket]);

@@ -6,4 +6,5 @@ export enum SocketEvents {
     GET_ROOMS = 'GET_ROOMS',
     JOIN_ROOM = 'JOIN_ROOM',
     LEAVE_ROOM = 'LEAVE_ROOM',
+    SET_USER_NAME = 'SET_USER_NAME',
 }
