@@ -40,6 +40,9 @@ export function GameScreen({ gameStatus, height }: GameScreenProps) {
             case 'over': {
                 return <div>Game over</div>;
             }
+            case 'waitForHost': {
+                return <div>Wait for the host to start the game</div>;
+            }
             default: {
                 return null;
             }

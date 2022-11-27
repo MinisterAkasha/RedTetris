@@ -3,6 +3,8 @@ import { PieceType, PieceShape as PlayfieldType } from '../../models/piese';
 import { COLS, ROWS } from '../../utils/constants';
 import { GameStatusType } from '../../models/game';
 
+type GameRole = 'host' | 'player';
+
 export class Game {
     static points = [40, 100, 300, 1200];
     private playfield: PlayfieldType;
@@ -14,14 +16,14 @@ export class Game {
     private _level: number;
     gameStatus: GameStatusType;
 
-    constructor() {
+    constructor(role: GameRole) {
         this.playfield = this.create2DArray(ROWS, COLS);
         this.activePiece = this.createPiece();
         this.nextPiece = this.createPiece();
         this.lines = 0;
         this.score = 0;
         this._level = 0;
-        this.gameStatus = 'start';
+        this.gameStatus = role === 'host' ? 'start' : 'waitForHost';
     }
 
     // TODO добавить систему уровней по времени

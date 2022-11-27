@@ -1,3 +1,5 @@
+import { User } from '../server/User/User';
+
 export type ModeType = 'solo' | 'multiplayer';
 
 export interface RoomType {
@@ -5,5 +7,5 @@ export interface RoomType {
     host: string;
     limit: number;
     usersCount: number;
-    users: string[];
+    users: User[];
 }

@@ -2,7 +2,7 @@ import { Piece } from '../server/Piece/Piece';
 
 import { PieceShape } from './piese';
 
-export type GameStatusType = 'start' | 'pause' | 'over' | 'playing';
+export type GameStatusType = 'start' | 'pause' | 'over' | 'playing' | 'waitForHost';
 
 export interface GameState {
     playfield: PieceShape;

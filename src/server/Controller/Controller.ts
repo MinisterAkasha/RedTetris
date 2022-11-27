@@ -21,6 +21,10 @@ export class Controller {
 
     update() {
         this.game.movePieceDown();
+        this.sendGameState();
+    }
+
+    sendGameState() {
         this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
     }
 
@@ -52,7 +56,7 @@ export class Controller {
                 case 'Space': {
                     if (isPlaying) {
                         this.stopTimer();
-                        this.game.hardDrop(() => this.socket.emit(SocketEvents.GAME_STATE, this.game.getState()));
+                        this.game.hardDrop(this.sendGameState);
                     }
                     break;
                 }
@@ -85,9 +89,9 @@ export class Controller {
             }
 
             if (isPlaying && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key)) {
-                this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
+                this.sendGameState();
             } else if (['Escape', 'Enter'].includes(key)) {
-                this.socket.emit(SocketEvents.GAME_STATE, this.game.getState());
+                this.sendGameState();
             }
         });
     }

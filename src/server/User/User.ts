@@ -4,6 +4,11 @@ import { Socket } from 'socket.io';
 import { Game } from '../Game/Game';
 import { Controller } from '../Controller/Controller';
 
+interface UserRoomStatus {
+    connected: boolean;
+    isHost: boolean;
+}
+
 export class User {
     // @ts-ignore
     private controller: Controller | null;
@@ -11,6 +16,7 @@ export class User {
     readonly socket: Socket;
     private _name: string | null;
     readonly id: string;
+    private _roomStatus: UserRoomStatus;
 
     constructor(socket: Socket, id: string) {
         this._name = null;
@@ -18,6 +24,7 @@ export class User {
         this.id = id;
         this._game = null;
         this.controller = null;
+        this._roomStatus = { connected: false, isHost: false };
     }
 
     set game(game: Game | null) {
@@ -40,6 +47,14 @@ export class User {
 
     get name() {
         return this._name as string;
+    }
+
+    get roomStatus(): UserRoomStatus {
+        return this._roomStatus;
+    }
+
+    set roomStatus(value: UserRoomStatus) {
+        this._roomStatus = value;
     }
 }
 

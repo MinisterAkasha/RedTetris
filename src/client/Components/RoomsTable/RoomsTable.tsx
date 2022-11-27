@@ -35,9 +35,9 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
                 Users
             </Sell>
             <Sell position={5} size={1} />
-            {rooms.map(({ mode, limit, host, usersCount }) => {
+            {rooms.map(({ mode, limit, host, usersCount }, i) => {
                 return (
-                    <React.Fragment key={host}>
+                    <React.Fragment key={i}>
                         <Sell position={1} size={2}>
                             {host}
                         </Sell>
