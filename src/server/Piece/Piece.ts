@@ -46,13 +46,26 @@ const typeToBlocks: Record<PieceType, PieceShape> = {
 export class Piece {
     readonly type: PieceType;
     blocks: PieceShape;
+    prevState: PieceShape;
     x: number;
     y: number;
 
     constructor(type: PieceType) {
         this.type = type;
         this.blocks = typeToBlocks[this.type];
+        this.prevState = this.blocks;
         this.x = Math.floor((COLS - this.blocks.length) / 2);
         this.y = -1;
+    }
+
+    rotate() {
+        const { blocks } = this;
+        this.prevState = blocks;
+
+        this.blocks = blocks[0].map((_, index) => blocks.map((row) => row[index]).reverse());
+    }
+
+    rotateBack() {
+        this.blocks = this.prevState;
     }
 }

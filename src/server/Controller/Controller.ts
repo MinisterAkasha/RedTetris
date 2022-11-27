@@ -56,7 +56,7 @@ export class Controller {
                 case 'Space': {
                     if (isPlaying) {
                         this.stopTimer();
-                        this.game.hardDrop(this.sendGameState);
+                        this.game.hardDrop(this.sendGameState.bind(this));
                     }
                     break;
                 }

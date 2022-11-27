@@ -103,12 +103,10 @@ export class Game {
 
     // TODO сделать wall jump
     rotatePiece() {
-        const { blocks } = this.activePiece;
-
-        this.activePiece.blocks = blocks[0].map((_, index) => blocks.map((row) => row[index]).reverse());
+        this.activePiece.rotate();
 
         if (this.hasCollision()) {
-            this.activePiece.blocks = blocks;
+            this.activePiece.rotateBack();
         }
     }
 

@@ -52,7 +52,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on(SocketEvents.CREATE_ROOM, (data: RoomType) => {
-        console.log('data', data);
         const room = new Room({ ...data, host: user });
 
         rooms.push(room);
